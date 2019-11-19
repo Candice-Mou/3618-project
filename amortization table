@@ -1,0 +1,22 @@
+#Compute the payment size of amortization loan with given number of payment number, outstanding balance and interest rate
+loan <- 200000
+interest <- 0.03
+number <- 10
+annual <- interest
+monthly <- (1+annual)^(1/12)-1
+num_periods <- number*12
+outstanding_balance <- loan
+payment_size <- outstanding_balance*monthly/(1-(1+monthly)^(-num_periods))
+row1 <- c(0,0,outstanding_balance)
+amortization <- matrix(0,1+num_periods,3)
+amortization[1] <- row1
+for(time in 1: num_periods) {
+  interest_paid <- monthly * outstanding_balance
+  principal_repaid <- payment_size - interest_paid
+  outstanding_balance <- outstanding_balance - principal_repaid
+  amortization[time+1] <- c(interest_paid, principal_repaid, outstanding_balance)
+}
+print(amortization)
+rownames(amortization) = c(0,1:num_periods)
+colnames(amortization) = c("I","PR","OB")
+print(amortization)
